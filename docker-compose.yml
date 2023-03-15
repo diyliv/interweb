@@ -1,0 +1,31 @@
+version: '3.3'
+services:
+ app:
+  container_name: interweb_app
+  build:
+   dockerfile: Dockerfile
+   context: .
+  restart: on-failure 
+  depends_on:
+   - pg
+ pg:
+  image: postgres:11
+  container_name: pg_interweb
+  restart: on-failure 
+  depends_on:
+   - migrate 
+  ports:
+   - "5432:5432"
+  env_file:
+   - .env
+  healthcheck:
+   test: ["CMD-SHELL", "pg_isready -U postgres"]
+   interval: 10s
+   timeout: 5s
+   retries: 5
+ migrate:
+  image: migrate/migrate
+  restart: always
+  volumes:
+   - ./schema:/schema
+  command: ["-path", "/schema", "-database", "postgres://postgres:postgres@pg_interweb:5432/postgres?sslmode=disable", "up", "3"]

@@ -1,0 +1,11 @@
+Postgres:
+ Host: pg_interweb
+ Port: 5432
+ Login: postgres
+ Password: postgres
+ DB: postgres 
+ ConnMaxLifeTime: 3
+ MaxOpenConn: 10
+ MaxIdleConn: 10
+Telegram:
+ Token: 
